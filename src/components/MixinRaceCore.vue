@@ -750,14 +750,19 @@ export default {
         if (startPhase === 1 && this.currentPhase === 2) {
           this.spurtParameters = this.calcSpurtParameter();
 
+          const rcp_umapower = this.umaStatus.power*this.condCoef[this.modifiedCondition] + this.passiveBonus.power;
+          console.log("uma :", this.umaStatus.power);
+          console.log("passive :", this.passiveBonus.power);
+          console.log("rcp_umapower :", rcp_umapower);
           /*增加進入終盤後添加脚色十分處理**/
-          if (this.modifiedPower > 1200) {
+          if (rcp_umapower > 1200) {
+            
             /**脚質距離係數**/
             const rcp_dis_style_coef = this.rcp_dis_running_style_coef();
             /*加速度：√((實際力量-1200)×130)×0.001x脚質距離係數*/
             const rcp_accel =
               Math.sqrt(
-                (this.modifiedPower - 1200) *
+                (rcp_umapower - 1200) *
                   RCP.RELEASE_CONSERVE_POWER_DECEL_COEF
               ) *
               RCP.RELEASE_CONSERVE_POWER_ACCEL_COEF *
@@ -775,7 +780,7 @@ export default {
               startFrame: this.frameElapsed,
             });
 
-            console.log("modifiedPower :", this.modifiedPower);
+            console.log("modifiedPower :", rcp_umapower);
             console.log("rcp_accel :", rcp_accel);
             console.log("del :", RCP.RELEASE_CONSERVE_POWER_DECEL_COEF);
             console.log("acc :", RCP.RELEASE_CONSERVE_POWER_ACCEL_COEF);
